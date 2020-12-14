@@ -1,8 +1,22 @@
 version: "3"
 services:
+  radius-mysql:
+    image: mariadb:10.3
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+      - MYSQL_DATABASE=radius
+      - MYSQL_USER=radius
+      - MYSQL_PASSWORD=Ev0lable
+      - MYSQL_ROOT_PASSWORD=dalorootpass
+    volumes:
+      - ./radius:/var/lib/mysql
+    ports:
+      - '3306:3306'
+    restart: always
   radius:
-    image: frauhottelmann/daloradius-docker:tag #you need to change the tag to your arch and the desired version
-    container_name: radius
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     restart: always
     depends_on:
       - "radius-mysql" 
@@ -15,20 +29,11 @@ services:
       - MYSQL_PORT=3306
       - MYSQL_DATABASE=radius
       - MYSQL_USER=radius
-      - MYSQL_PASSWORD=dalodbpass
-#    volumes:
-#      - ./radius/clients.conf:/etc/freeradius/3.0/clients.conf
+      - MYSQL_PASSWORD=Ev0lable
+      - MYSQL_ROOT_PASSWORD=dalorootpass
+    volumes:
+      - ./freeradius/clients.conf:/etc/freeradius/3.0/clients.conf
+#       - ./radius/clients.conf:/etc/freeradius/3.0/clients.conf
 #      - ./radius/eap:/etc/freeradius/3.0/mods-available/eap
 #      - ./ssl/fullchain.pem:/etc/freeradius/3.0/certs/fullchain.pem
 #      - ./ssl/privkey.pem:/etc/freeradius/3.0/certs/privkey.pem
-  radius-mysql:
-    image: mariadb:10.3 # use image: linuxserver/mariadb:arm32v7-110.3.18mariabionic-ls37 for RaspberryPi
-    container_name: radius-mysql
-    restart: always
-    environment:
-      - MYSQL_DATABASE=radius
-      - MYSQL_USER=radius
-      - MYSQL_PASSWORD=dalodbpass
-      - MYSQL_ROOT_PASSWORD=dalorootpass
-    volumes:
-      - "./radius-mysql:/var/lib/mysql"

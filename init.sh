@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-echo '#!/bin/bash' > /cbs/init.sh
-echo 'echo "Initialization error" 1>&2' >> /cbs/init.sh
+echo '#!/bin/bash' > /opt/init.sh
+echo 'echo "Initialization error" 1>&2' >> /opt/init.sh
 
 DEBIAN_FRONTEND=noninteractive
 
@@ -45,9 +45,9 @@ sed -i "s/\$configValues\['CONFIG_DB_USER'\] = .*;/\$configValues\['CONFIG_DB_US
 sed -i "s/\$configValues\['CONFIG_DB_NAME'\] = .*;/\$configValues\['CONFIG_DB_NAME'\] = '$MYSQL_DATABASE';/" /var/www/html/daloradius/library/daloradius.conf.php
 sed -i "s/\$configValues\['FREERADIUS_VERSION'\] = .*;/\$configValues\['FREERADIUS_VERSION'\] = '3';/" /var/www/html/daloradius/library/daloradius.conf.php
 
-rm -r /cbs/*
+#rm -r /cbs/*
 
-echo '#!/bin/bash' > /cbs/init.sh
-echo 'supervisord -c /etc/supervisor.conf' >> /cbs/init.sh
+#echo '#!/bin/bash' > /cbs/init.sh
+#echo 'supervisord -c /etc/supervisor.conf' >> /cbs/init.sh
 
 supervisord -c /etc/supervisor.conf
